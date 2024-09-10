@@ -69,6 +69,12 @@ interface IOrder {
 }
 ```
 
+Типы товаров
+
+```
+type TCatalogProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price'>
+type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' | 'description'>
+```
 ## Архитектура приложения
 
 Код приложения разделен на слои согласно парадигме MVP: 
@@ -100,36 +106,45 @@ interface IOrder {
 Класс отвечает за хранение и логику работы с данными товара.\
 Конструктор класса принимает инстант брокера событий\
 В полях класса хранятся следующие данные:
-- protected items: IProduct[] - массив товаров
+- protected catalogItems: IProduct[] - массив товаров
 - protected basketItems: IProduct[] = [] - массив товаров в корзине
-- protected _preview: string | null - id карточки, выбранной для просмотра в модальной окне
-- protected events: IEvents - экземпляр класса `EventEmitter` для инициации событий при изменении данных.
 
 Так же класс предоставляет набор методов для взаимодействия с этими данными.
-- setItems(items: IProductItem[]) {} - устанавливает товары на главную страницу
-- getItems() {} - возвращает товары
+- set catalog(items: IProduct[]) {} - устанавливает товары на главную страницу
+- get catalog() {} - возвращает товары
+- get count() {} - возвращает число товаров в корзине
+- get total() {} - возвращает сумму товаров в корзине
+- get basket() {} - возвращает массив товаров в карзине
+- get basketItemsId() {} - возвращает массив id товаров
 - getItem(id: string): IProductItem {} - возвращает один товар
-- getBasketItems(): IProductItem[] {} - возвращает массив товаров в карзине
+- isToBasket(id: string): boolean {} - проверяет наличие товара в корзине
+- clearBasket(): IProduct[] {} - очищает корзину
 - addToBasket(item: IProductItem) {} - добавляет товар в корзину
 - deleteFromBasket(id: string) {} - удаляет товар из корзины
-- getCount() {} - возвращает число товаров в корзине
-- getTotal() {} - возвращает сумму товаров в корзине
+- isPriceless(item: IProduct) {} - проверяет бесценный товар
 
 #### Класс OrderModel
 Класс отвечает за хранение и логику работы с данными заказа.\
 Конструктор класса принимает инстант брокера событий\
-В полях класса хранятся следующие данные:
-- protected payment: string - вид оплаты
-- protected email: string - адрес электронной почты
-- protected phone: string - номер телефона
-- protected address: string - адрес доставки
-- protected total: number | null - сумма заказа
-- protected items: string[] - массив id товаров
+Поле класса хранит объект:
+- protected order: IOrder = {
+    payment: '',    - вид оплаты
+    address: '',    - адрес электронной почты
+    email: '',      - номер телефона
+    phone: '',      - адрес доставки
+    total: 0,       - сумма заказа
+    items: []       - массив id товаров
+  };
 
 Так же класс предоставляет набор методов для взаимодействия с этими данными.
-- setOrderField(field: keyof IOrderForm, value: string) {} - устанвливает значение в поле формы
-- validateOrder() {} - проверяет форму перед отравкой на сервер
-- createOrder() {} - создает заказ
+- set payment(value: string) {} - устанавливает вид оплаты
+- get payment() {} - возвращает вид оплаты
+- set address(value: string) {} - устанавливает адрес
+- get address() {} - возвращает адрес
+- set email(value: string) {} - устанавливает почту
+- get email() {} - возвращает почту
+- set phone(value: string) {} - устанавливает телефон 
+- get phone() {} - возвращает телефон
 
 ### Классы представления
 Все классы представления отвечают за отображение внутри контейнера (DOM-элемент) передаваемых в них данных.

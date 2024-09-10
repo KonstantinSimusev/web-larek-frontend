@@ -181,7 +181,7 @@
 				<h2 class="card__title">Бэкенд-антистресс</h2>
 				<p class="card__text">Если планируете решать задачи в тренажёре, берите два.</p>
 				<div class="card__row">
-					<button class="button card__button">В корзину</button>
+					<button class="button card__button button_add">В корзину</button>
 					<span class="card__price">1000 синапсов</span>
 				</div>
 			</div>
@@ -214,8 +214,8 @@
 				<div class="order__field">
 					<h2 class="modal__title">Способ оплаты</h2>
 					<div class="order__buttons">
-						<button name="card" type="button" class="button button_alt">Онлайн</button>
-						<button name="cash" type="button" class="button button_alt">При получении</button>
+						<button name="card" type="button" class="button button_alt button_online">Онлайн</button>
+						<button name="cash" type="button" class="button button_alt button_get">При получении</button>
 					</div>
 				</div>
 				<label class="order__field">
@@ -235,15 +235,15 @@
 			<div class="order">
 				<label class="order__field">
 					<span class="form__label modal__title">Email</span>
-					<input name="email" class="form__input" type="text" placeholder="Введите Email" />
+					<input name="email" class="form__input input_email" type="text" placeholder="Введите Email" />
 				</label>
 				<label class="order__field">
 					<span class="form__label modal__title">Телефон</span>
-					<input name="phone" class="form__input" type="text" placeholder="+7 (" />
+					<input name="phone" class="form__input input_phone" type="text" placeholder="+7 (" />
 				</label>
 			</div>
 			<div class="modal__actions">
-				<button type="submit" disabled class="button">Оплатить</button>
+				<button type="submit" disabled class="button button_pay">Оплатить</button>
 				<span class="form__errors"></span>
 			</div>
 		</form>
