@@ -54,7 +54,6 @@ export class ProductPreviewView extends Component<TPreviewProduct> {
   protected _price: HTMLElement;
   protected _id: string;
   protected _addButton: HTMLButtonElement;
-  protected _empty: boolean;
 
   constructor(protected container: HTMLElement, protected events: IEvents) {
 		super(container);
@@ -132,7 +131,7 @@ export class ProductBasketView extends Component<IProductBasketView> {
   protected _index: HTMLElement;
   protected _title: HTMLElement;
   protected _price: HTMLElement;
-  protected _button: HTMLButtonElement;
+  protected _deleteButton: HTMLButtonElement;
 
   constructor(protected container: HTMLElement, protected events: IEvents) {
 		super(container);
@@ -141,9 +140,9 @@ export class ProductBasketView extends Component<IProductBasketView> {
     this._index = ensureElement('.basket__item-index', this.container) as HTMLElement;
     this._title = ensureElement('.card__title', this.container) as HTMLElement;
     this._price = ensureElement('.card__price', this.container) as HTMLElement;
-    this._button = ensureElement('.basket__item-delete', this.container) as HTMLButtonElement;
+    this._deleteButton = ensureElement('.basket__item-delete', this.container) as HTMLButtonElement;
 
-    this._button.addEventListener('click', () => {
+    this._deleteButton.addEventListener('click', () => {
       this.events.emit('basket:delete', {id: this._id});
     });
   }

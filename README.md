@@ -1,5 +1,4 @@
 # Проектная работа "Веб-ларек"
-
 Стек: HTML, SCSS, TS, Webpack
 
 Структура проекта:
@@ -29,8 +28,8 @@ npm run start
 yarn
 yarn start
 ```
-## Сборка
 
+## Сборка
 ```
 npm run build
 ```
@@ -42,7 +41,6 @@ yarn build
 ```
 
 ## Данные и типы данных, используемые в приложении
-
 Товар
 
 ```
@@ -75,8 +73,8 @@ interface IOrder {
 type TCatalogProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price'>
 type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' | 'description'>
 ```
-## Архитектура приложения
 
+## Архитектура приложения
 Код приложения разделен на слои согласно парадигме MVP: 
 - слой представления, отвечает за отображение данных на странице, 
 - слой данных, отвечает за хранение и изменение данных
@@ -134,7 +132,7 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
     phone: '',      - адрес доставки
     total: 0,       - сумма заказа
     items: []       - массив id товаров
-  };
+  }
 
 Так же класс предоставляет набор методов для взаимодействия с этими данными.
 - set payment(value: string) {} - устанавливает вид оплаты
@@ -157,7 +155,7 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
 - modal: HTMLElement - элемент модального окна
 - events: IEvents - брокер событий
 
-#### Класс class ProductView
+#### Класс class ProductCatalogView
 Предназначен для отображения карточки товара на главной странице.\
 Поля класса:
 - protected _category: HTMLElement - категория товара
@@ -176,8 +174,8 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
 - set price(value: number) {}
 - set id(value: string) {}
 
-#### Класс class PreviewView
-Предназначен для отображения карточки товара на главной странице.\
+#### Класс class ProductPreviewView
+Предназначен для отображения карточки товара с полным описанием.\
 Поля класса:
 - protected _category: HTMLElement - категория товара
 - protected _title: HTMLElement - название товара
@@ -185,6 +183,7 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
 - protected _price: HTMLElement - цена товара
 - protected _description: HTMLElement - описание товара
 - protected _id: string - идентификатор товара
+- protected _addButton: HTMLButtonElement - кнопка добавления товара в корзину
 
 - constructor(protected container: HTMLElement, protected events: IEvents) - конструктор принимает контейнер для товара и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
 
@@ -196,6 +195,27 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
 - set price(value: number) {}
 - set description(value: string) {}
 - set id(value: string) {}
+- set button(value: string) {}
+- set isAdded(value: boolean) {}
+- set selected(isPriceless: boolean) {}
+
+#### Класс ProductBasketView
+Предназначен для отображения товара в корзине.\
+Поля класса:
+- protected _id: string - id товара
+- protected _index: HTMLElement - номер по порядку
+- protected _title: HTMLElement - назавние товара
+- protected _total: HTMLElement - цена товара
+- protected _deleteButton: HTMLElement - кнопка удаления товара
+
+- constructor(protected container: HTMLElement, protected events: IEvents) - конструктор принимает контейнер для товара и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
+
+Методы:
+Устанавливают значения
+set id(value: string) {}
+set index(value: number) {}
+set title(value: string) {}
+set price(value: number) {}
 
 #### Класс class PageView
 Предназначен для отображения главной страницы.\
@@ -208,78 +228,75 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
 - constructor(protected container: HTMLElement, protected events: IEvents) - конструктор принимает контейнер для товара и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
 
 Методы:
-- set counter(value: number) {} устанавливает количество товаров в корзине
-- set catalog(items: HTMLElement[]) {} отображает контейнер с товарами
+- set counter(value: number) {} - устанавливает количество товаров в корзине
+- set catalog(items: HTMLElement[]) {} - устанавливает контейнер с товарами
+- set locked(value: boolean) {} - блокирует прокрутку страницы
 
 #### Класс BasketView
 Предназначен для отображения корзины с товарами.\
 Поля класса:
-- protected title: HTMLElement - название корзины
-- protected _basketItems: HTMLElement - массив товаров
+- protected _title: HTMLElement - название корзины
+- protected _list: HTMLElement - массив товаров
 - protected _total: HTMLElement - общая цена
-- protected orderButton: HTMLElement - кнопка офрмления заказа
+- protected _orderButton: HTMLElement - кнопка офрмления заказа
 
 Методы:
-- set basketItems(items: HTMLElement[]) {} - устанавливает массив с товарами
-- set total(value: string) {} - устанавливает суммму заказа
+- set items(items: HTMLElement[]) {} - устанавливает массив с товарами
+- set selected(items: IProduct[]) {} - устанавливает активную кнопку
+- set total(value: string) {} - устанавливает сумму заказа
 
-#### Класс BasketProductView
-Предназначен для отображения товара в корзине.\
-Поля класса:
-- protected _index: HTMLElement - номер по порядку
-- protected _title: HTMLElement - назавние товара
-- protected _total: HTMLElement - цена товара
-- protected _deleteButton: HTMLElement - кнопка удаления товара
-
-- constructor(protected container: HTMLElement, protected events: IEvents) - конструктор принимает контейнер для товара и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
-
-Методы:
-- set title(value: string) {} - устанавливает название
-- set total(value: number) {} - устанавливает
-
-#### Класс AddressOrderView
+#### Класс OrderView
 Предназначен для отображения формы с адрессом.\
 Поля класса:
-- protected payment: HTMLElement[] - кнопки c видом оплаты
-- protected input: HTMLInputElement - поле с адрессом
-- protected _form: HTMLFormElement - форма
-- protected errors: Record<string, HTMLElement> - ошибка при заполнении формы
-- protected submitButton: HTMLButtonElement - кнопка далее
+- protected onlineButton: HTMLButtonElement - кнопка с видом оплаты
+- protected getButton: HTMLButtonElement - кнопка с видом оплаты
+- protected inputField: HTMLInputElement - поле с адрессом
+- protected submitButton: HTMLButtonElement - кнопка формы
+- protected error: HTMLElement - ошибка в форме
+- protected formName: string - имя формы
 
-- constructor(protected container: HTMLElement, protected events: IEvents) - конструктор принимает контейнер для товара и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
+- constructor(protected container: HTMLFormElement, protected events: IEvents) - конструктор принимает контейнер формы и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
 
 Методы:
-- set inputValues(data: Record<string, string>) {} - установить значение
-- set error(data: { field: string; value: string; validInformation: string }) {} - установить ошибку
-- set valid(isValid: boolean) {} - установить валидность
-- get form() {} - получить форму
-- getInputValues() {} - получить значение поля
-- showInputError(field: string, errorMessage: string) {} - показать ошибку
-- hideInputError(field: string) {} - скрыть ошибку
-- clear() {} - очистить форму
+Устанавливают значения
+- set value(value: string) {}
+- set inputError(value: string) {}
+- set completedOnlineButton(value: boolean) {}
+- set completedOnfootButton(value: boolean) {}
+- set selected(value: boolean) {}
 
-#### Класс ContactsOrderView
+#### Класс ContactsView
 Предназначен для отображения формы с контактами.\
 Поля класса:
-- protected payment: HTMLElement[] - кнопки c видом оплаты
-- protected emailInput: HTMLInputElement - поле с адрессом почты
-- protected contactsInput: HTMLInputElement - поле с номером телефона
-- protected _form: HTMLFormElement - форма
-- protected errors: Record<string, HTMLElement> - ошибка при заполнении формы
-- protected submitButton: HTMLButtonElement - кнопка далее
+- protected emailInputField: HTMLInputElement - поле с почтой
+- protected phoneInputField: HTMLInputElement - поле с телефоном
+- protected submitButton: HTMLButtonElement - кнопка формы
+- protected error: HTMLElement - ошибка в форме
+- protected formName: string - имя формы
 
-- constructor(protected container: HTMLElement, protected events: IEvents) - конструктор принимает контейнер для товара и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
+- constructor(protected container: HTMLFormElement, protected events: IEvents) - конструктор принимает контейнер формы и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
 
 Методы:
-- set emailInputValues(data: Record<string, string>) {} - установить значение почты
-- set contanctsInputValues(data: Record<string, string>) {} - установить значение телефона
-- set error(data: { field: string; value: string; validInformation: string }) {} - установить ошибку
-- set valid(isValid: boolean) {} - установить валидность
-- get form() {} - получить форму
-- getInputValues() {} - получить значение поля
-- showInputError(field: string, errorMessage: string) {} - показать ошибку
-- hideInputError(field: string) {} - скрыть ошибку
-- clear() {} - очистить форму
+Устанавливают значения
+- set emailValue(value: string) {}
+- get emailValue() {}
+- set phoneValue(value: string) {}
+- get phoneValue() {}
+- set inputError(value: string) {}
+- get inputError() {}
+- set selected(value: boolean) {}
+
+#### Класс SuccessView
+Предназначен для отображения модального окна с информацией об успешной транзакции.\
+Поля класса:
+- protected _description: HTMLElement - информация о сумме списания
+- protected _button: HTMLButtonElement - кнопка возврата на главную страницу
+
+- constructor(protected container: HTMLElement, protected events: IEvents) - конструктор принимает контейнер элемента и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
+
+Методы:
+Устанавливают значения
+- set description(value: number) {}
 
 ### Слой коммуникации
 
@@ -292,16 +309,18 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
 В `index.ts` сначала создаются экземпляры всех необходимых классов, а затем настраивается обработка событий.
 
 *Список событий, которые могут генерироваться в системе:*\
-- `product:select` - открыть товар в модальном окне
+- `items:changed` - отследить изменения
+- `item:select` - открыть товар в модальном окне
 - `product:add` - добавить товар в корзину
 - `basket:open` - открыть корзину
-- `product:delete` - выбор товара для удаления
-- `product:order` - выбор заказа для оформления
-
-- `email:input` - изменение данных в форме с почтой
-- `contacts:input` - изменение данных в форме с контактами
-- `address:input` - изменение данных в форме с адресом
+- `basket:delete` - выбор товара для удаления
+- `order:open` - открыть форму заказа для заполнения адреса
+- `payment:online` - выбрать оплату 'онлайн'
+- `payment:get` - выбрать оплату 'при получении'
+- `order:input` - валидация поля с адресом
+- `forward:submit` - открыть форму заказа для заполнения почты и телефона
+- `contacts:input` - валидация полей почты и телефона
 - `oder:submit` - сохранение данных заказа
-- `email:validation` - событие, сообщающее о необходимости валидации формы с почтой
-- `contacts:validation` - событие, сообщающее о необходимости валидации формы с контактами
-- `address:validation` - событие, сообщающее о необходимости валидации формы с адрессом
+- `order:close` - закрыть модальное окно после успешной транзакции
+- `modal:open` - открыть модальное окно
+- `modal:close` - закрыть модальное окно

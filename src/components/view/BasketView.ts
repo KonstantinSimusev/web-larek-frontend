@@ -12,16 +12,16 @@ export class BasketView extends Component<IBasketView> {
     protected _title: HTMLElement;
     protected _list: HTMLElement;
     protected _total: HTMLElement;
-    protected _button: HTMLElement;
+    protected _orderButton: HTMLElement;
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
         super(container);
         this._title = this.container.querySelector('.modal__title') as HTMLElement;
         this._list = this.container.querySelector('.basket__list') as HTMLElement;
         this._total = this.container.querySelector('.basket__price') as HTMLElement;
-        this._button = this.container.querySelector('.basket__button') as HTMLElement;
+        this._orderButton = this.container.querySelector('.basket__button') as HTMLElement;
 
-        this._button.addEventListener('click', () => {
+        this._orderButton.addEventListener('click', () => {
             events.emit('order:open');
         });
 
@@ -35,15 +35,14 @@ export class BasketView extends Component<IBasketView> {
         } else {
             this._list.replaceChildren(...items);
             this._title.textContent = 'Корзина пуста';
-            
         }
     }
 
     set selected(items: IProduct[]) {
         if (items.length) {
-            this.setDisabled(this._button, false);
+            this.setDisabled(this._orderButton, false);
         } else {
-            this.setDisabled(this._button, true);
+            this.setDisabled(this._orderButton, true);
         }
     }
 
