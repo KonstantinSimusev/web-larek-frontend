@@ -26,6 +26,7 @@ export class ProductCatalogView extends Component<TCatalogProduct> {
 
   set category(value: string) {
     this.setText(this._category, value);
+    this.setColor(this._category, value);
   }
 
   set title(value: string) {
@@ -73,6 +74,7 @@ export class ProductPreviewView extends Component<TPreviewProduct> {
 
   set category(value: string) {
     this.setText(this._category, value);
+    this.setColor(this._category, value);
   }
 
   set title(value: string) {
@@ -116,6 +118,10 @@ export class ProductPreviewView extends Component<TPreviewProduct> {
       this.setDisabled(this._addButton, true);
       this.setText(this._addButton, 'Товар не доступен');
     }
+  }
+  
+  set deleteColor(value: boolean) {
+    this.removeColor(this._category, value);
   }
 }
 

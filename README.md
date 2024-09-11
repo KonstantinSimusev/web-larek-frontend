@@ -98,6 +98,15 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
 #### Класс Component
 Класс является дженериком и родителем всех компонентов слоя представления. В дженерик принимает тип объекта, в котором данные будут передаваться в метод render для отображения данных в компоненте. В конструктор принимает элемент разметки, являющийся основным родительским контейнером компонента. Содержит метод render, отвечающий за сохранение полученных в параметре данных в полях компонентов через их сеттеры, возвращает обновленный контейнер компонента.
 
+#### Класс Form
+Класс является дженериком и родителем всех форм слоя представления.
+
+В полях класса хранятся следующие данные:
+- protected formName: string - имя формы
+
+- constructor(protected container: HTMLFormElement, protected events: IEvents) - конструктор принимает контейнер формы и экземпляр класса `EventEmitter` для инициации событий, создает слушатель события
+
+
 ### Слой данных
 
 #### Класс ProductModel
@@ -135,6 +144,7 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
   }
 
 Так же класс предоставляет набор методов для взаимодействия с этими данными.
+- createOrder(object: ProductModel) {} - создает заказ
 - set payment(value: string) {} - устанавливает вид оплаты
 - get payment() {} - возвращает вид оплаты
 - set address(value: string) {} - устанавливает адрес
@@ -198,6 +208,7 @@ type TPreviewProduct = Pick<IProduct, 'category' | 'title' | 'image' | 'price' |
 - set button(value: string) {}
 - set isAdded(value: boolean) {}
 - set selected(isPriceless: boolean) {}
+- set deleteColor(value: boolean) {}
 
 #### Класс ProductBasketView
 Предназначен для отображения товара в корзине.\
@@ -264,6 +275,7 @@ set price(value: number) {}
 - set completedOnlineButton(value: boolean) {}
 - set completedOnfootButton(value: boolean) {}
 - set selected(value: boolean) {}
+- resetSettings() {} - сбрасывает настройки
 
 #### Класс ContactsView
 Предназначен для отображения формы с контактами.\
@@ -285,6 +297,7 @@ set price(value: number) {}
 - set inputError(value: string) {}
 - get inputError() {}
 - set selected(value: boolean) {}
+- resetSettings() {} - сбрасывает настройки
 
 #### Класс SuccessView
 Предназначен для отображения модального окна с информацией об успешной транзакции.\

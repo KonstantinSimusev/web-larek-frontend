@@ -65,15 +65,28 @@ api.getProductList()
 events.on('items:changed', () => {
   page.counter = productModel.basket.length;
   basket.selected = productModel.basket;
+
+  basket.render({
+    items: productModel.basket.map((item, index) => 
+      new ProductBasketView(cloneTemplate(basketProductTemplate), events)
+        .render({
+          id: item.id,
+          index: index + 1,
+          title: item.title,
+          price: item.price
+        })),
+    total: productModel.total,
+  });
 });
 
 // Выбрать товар
 events.on('item:select', ({id}: {id: string}) => {
   const item = productModel.getItem(id);
   preview.selected = productModel.isPriceless(item);
+  preview.deleteColor = true;
 
   if (productModel.isToBasket(id)) preview.isAdded = true;
-  
+
   modal.render({
     content: preview.render(item)
   });
@@ -93,36 +106,12 @@ events.on('basket:add', ({id}: {id: string}) => {
 events.on('basket:open', () => {
   basket.selected = productModel.basket;
 
-  modal.render({
-    content: basket.render({
-      items: productModel.basket.map((item, index) => 
-        new ProductBasketView(cloneTemplate(basketProductTemplate), events).render({
-          id: item.id,
-          index: index + 1,
-          title: item.title,
-          price: item.price
-        })),
-      total: productModel.total,
-    })
-  });
+  modal.render({content: basket.render()});
 });
 
 // Удалить товар из корзины
 events.on('basket:delete', ({id}: {id: string}) => {
   productModel.deleteFromBasket(id);
-  
-  modal.render({
-    content: basket.render({
-      items: productModel.basket.map((item, index) => 
-        new ProductBasketView(cloneTemplate(basketProductTemplate), events).render({
-          id: item.id,
-          index: index + 1,
-          title: item.title,
-          price: item.price
-        })),
-      total: productModel.total,
-    })
-  });
 })
 
 // Открыть форму заказа для заполнения адреса
@@ -183,26 +172,17 @@ events.on('contacts:input', ({ field, value } : { field: string, value: string }
 
 // Оплатить заказ
 events.on('order:submit', () => {
-  api.addOrder({
-    payment: orderModel.payment,
-    address: orderModel.address,
-    email: orderModel.email,
-    phone: orderModel.phone,
-    total: productModel.total,
-    items: productModel.basketItemsId
-  })
+  api.addOrder(orderModel.createOrder(productModel))
     .then(data => {
       pay.description = data.total;
       modal.render({content: pay.render()});
       productModel.clearBasket();
+      basket.render({items: [], total: 0});
       page.counter = productModel.basket.length;
-      order.value = '';
-      contacts.emailValue = '';
-      contacts.phoneValue = '';
-      order.completedOnlineButton = true;
-      order.selected = false;
+      order.resetSettings();
+      contacts.resetSettings();
     })
-    .catch(err => console.log(err));
+      .catch(err => console.log(err));
 });
 
 // Закрыть модальное окно после успешной транзакции
@@ -218,4 +198,5 @@ events.on('modal:open', () => {
 // Разблокируем прокрутку страницы, если модальное окно закрыто
 events.on('modal:close', () => {
   page.locked = false;
+  preview.deleteColor = true;
 });

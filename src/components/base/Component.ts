@@ -48,6 +48,40 @@ export abstract class Component<T> {
         }
     }
 
+    // Установить цвет
+    protected setColor(element: HTMLElement, value: unknown) {
+        switch (value) {
+            case 'софт-скил':
+                element.classList.add('card__category_soft');
+                break;
+            case 'другое':
+                element.classList.add('card__category_other');
+                break;
+            case 'дополнительное':
+                element.classList.add('card__category_additional');
+                break;
+            case 'кнопка':
+                element.classList.add('card__category_button');
+                break;
+            case 'хард-скил':
+                element.classList.add('card__category_hard');
+                break;
+        }
+    }
+
+    // Удалить цвет
+    protected removeColor(element: HTMLElement, value: boolean) {
+        if (value) {
+            element.classList.remove(
+                'card__category_soft',
+                'card__category_other',
+                'card__category_additional',
+                'card__category_button',
+                'card__category_hard'
+            );
+        }
+    }
+
     // Вернуть корневой DOM-элемент
     render(data?: Partial<T>): HTMLElement {
         Object.assign(this as object, data ?? {});

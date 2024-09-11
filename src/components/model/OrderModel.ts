@@ -1,5 +1,6 @@
 import { IEvents } from "../base/events";
-import { IOrder } from "../../types" 
+import { IOrder } from "../../types";
+import { ProductModel } from "./ProductModel";
 
 export class OrderModel {
   protected order: IOrder = {
@@ -13,6 +14,17 @@ export class OrderModel {
 
   constructor(protected events: IEvents) {
     this.events = events;
+  }
+
+  createOrder(object: ProductModel) {
+    return {
+      payment: this.payment,
+      address: this.address,
+      email: this.email,
+      phone: this.phone,
+      total: object.total,
+      items: object.basketItemsId
+    }
   }
 
   set payment(value: string) {

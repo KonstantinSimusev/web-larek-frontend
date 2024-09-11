@@ -1,5 +1,5 @@
 import { IEvents } from "../base/events";
-import { IProduct } from "../../types" 
+import { IProduct } from "../../types";
 
 export class ProductModel {
   protected catalogItems: IProduct[];
@@ -38,13 +38,13 @@ export class ProductModel {
     return this.catalogItems.find(item => item.id === id);
   }
 
-
   isToBasket(id: string): boolean {
     if (this.basketItems.filter(item => item.id === id).length) return true;
     else return false;
   }
 
   clearBasket(): IProduct[] {
+    this.events.emit('items:changed');
     return this.basketItems = [];
   }
 
