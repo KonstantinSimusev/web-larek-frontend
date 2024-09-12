@@ -57,9 +57,8 @@ api.getProductList()
       catalog: productModel.catalog.map(item => 
         new ProductCatalogView(cloneTemplate(catalogProductTemplate), events)
         .render(item))
-    });
-  })
-    .catch(err => console.log(err));
+    })
+  }).catch(err => console.log(err));
 
 // Отследить изменения в проекте
 events.on('items:changed', () => {

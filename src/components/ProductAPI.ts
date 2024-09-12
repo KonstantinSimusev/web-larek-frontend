@@ -25,7 +25,7 @@ export class ProductAPI extends Api implements IProductAPI {
     }
 
     getProductList(): Promise<IProduct[]> {
-        return this.get('/product').then((data: ApiListResponse<IProduct>) =>
+        return this.get(`/product`).then((data: ApiListResponse<IProduct>) =>
             data.items.map((item) => ({
                 ...item,
                 image: this.cdn + item.image
@@ -34,7 +34,7 @@ export class ProductAPI extends Api implements IProductAPI {
     }
 
     addOrder(object: IOrder): Promise<IOrder> {
-        return this.post('/order', object)
+        return this.post(`/order`, object)
     }
 
 }
